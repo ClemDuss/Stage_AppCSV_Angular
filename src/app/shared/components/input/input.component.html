@@ -1,0 +1,5 @@
+<div>
+    <label [for]="id">{{ label }}</label>
+    <br/>
+    <input [id]="id" [name]="name" [type]="type" [accept]="accept" [(ngModel)]="inputModel" (ngModelChange)="inputModelChange.emit(inputModel)" (change)="change">
+</div>

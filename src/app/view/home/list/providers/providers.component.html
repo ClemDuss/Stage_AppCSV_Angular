@@ -1,0 +1,9 @@
+<mat-list>
+    <mat-list-item *ngFor="let provider of this.providersService.getProviders(); index as providerId" [ngClass]="{'selectedProvider': providerId === this.providersService.getSelectedProviderIndex(), 'providerItem':true}" (click)="selectThisProvider(providerId)">
+        {{ provider.name }}
+    <mat-divider></mat-divider>
+    </mat-list-item>
+</mat-list>
+<p>
+    Fournisseur sélectionné : {{ selectedProvider.name }}
+</p>

@@ -1,0 +1,11 @@
+<div>
+    <div class="row" *ngFor="let categ of categs">
+        <div col-3>
+            <label for="{{ categ }}">{{ categ }}</label>
+        </div>
+        <div class="col-4"></div>
+        <select id="{{ categ }}">
+            <option *ngFor="let element of headerOptions" value="element">{{ element }}</option>
+        </select>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+.displayProviderActions{
+    display: block;
+}
+
+.notDisplayProviderActions{
+    display: none;
+}

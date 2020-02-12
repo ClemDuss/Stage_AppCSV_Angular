@@ -1,0 +1,17 @@
+.selectedProvider{
+    background: darkslategray;
+    color: white;
+    font-weight: bold;
+}
+
+.providerItem:hover{
+    cursor: pointer;
+    background: lightslategray;
+    color: white;
+    transition: ease 0.25s all;
+}
+
+p{
+    border: solid 1px black;
+    padding: 3px 6px
+}
