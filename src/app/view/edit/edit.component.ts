@@ -21,8 +21,8 @@ export class EditComponent implements OnInit {
 
   provider = new Provider();
 
-  providerName = '';
-  providerFile = '';
+  providerName : string;
+  providerFile : File;
 
   constructor(
     private providersService : ProvidersService,
@@ -30,6 +30,7 @@ export class EditComponent implements OnInit {
   ) { 
     this.provider = this.providersService.getSelectedProvider();
     this.providerName = this.provider.name;
+    this.providerFile = this.provider.file;
   }
 
   ngOnInit(): void {
@@ -48,6 +49,15 @@ export class EditComponent implements OnInit {
 
   goToHome(){
     this.router.navigate(['']);
+  }
+
+  updateFile(files:FileList = null){
+    if(files[0].toString() != "$"){
+      var file = files[0];
+      if(file != null){
+        this.providerFile = files[0];
+      }
+    }
   }
 
 }

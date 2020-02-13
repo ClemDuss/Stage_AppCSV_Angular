@@ -25,7 +25,18 @@ export class ProvidersService {
   }
 
   getLocalStorageProviders(){
-    return JSON.parse(localStorage.getItem("Providers"));
+    let newProviders : Array<Provider> = new Array<Provider>();
+    for(let i=0; i<localStorage.getItem("Providers").length-1; i++){
+      let provider = new Provider();
+      let jsonProvider = JSON.parse(localStorage.getItem("Providers"))[i];
+      if(jsonProvider != undefined){
+        provider.name = jsonProvider.name;
+        provider.file = jsonProvider.file;
+        provider.correspondence = jsonProvider.correspondence;
+        newProviders.push(provider);
+      }
+    }
+    return newProviders;
   }
 
   setLocalStorageProviders(){
