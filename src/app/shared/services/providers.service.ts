@@ -73,10 +73,9 @@ export class ProvidersService {
         newProviders.push(this.providers[i]);
       }
     }
+    this.providers = newProviders;
 
-    this.providers.splice(this.selectedProviderIndex, 1);
     this.selectedProviderIndex = -1;
-    console.log(this.providers);
     this.setLocalStorageProviders();
     this.setLocalStorageSelectedIndex();
   }
