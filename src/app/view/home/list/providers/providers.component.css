@@ -1,7 +1,5 @@
 .selectedProvider{
-    background: darkslategray;
-    color: white;
-    font-weight: bold;
+    background: rgb(172, 172, 172);
 }
 
 .providerItem:hover{
@@ -14,4 +12,15 @@
 p{
     border: solid 1px black;
     padding: 3px 6px
+}
+
+mat-list{
+    padding: 8px 0 0;
+}
+
+.tableRows:hover{
+    cursor: pointer;
+    background: rgb(219, 219, 219);
+    color: white;
+    transition: ease 0.25s all;
 }

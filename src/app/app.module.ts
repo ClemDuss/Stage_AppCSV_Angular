@@ -23,6 +23,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 
 import { EditProviderComponent } from './view/home/list/edit-provider/edit-provider.component';
 import { DeleteProviderComponent } from './view/home/list/delete-provider/delete-provider.component';
@@ -59,6 +61,8 @@ import { CorrespondenceComponent } from './shared/components/correspondence/corr
     MatFormFieldModule,
     MatButtonModule,
     MatTableModule,
+    MatSelectModule,
+    MatInputModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot([

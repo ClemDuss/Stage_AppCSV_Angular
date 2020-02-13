@@ -1,5 +1,12 @@
-<div>
+<!--<div>
     <label [for]="id">{{ label }}</label>
     <br/>
     <input [id]="id" [name]="name" [type]="type" [accept]="accept" [(ngModel)]="inputModel" (ngModelChange)="inputModelChange.emit(inputModel)" (change)="change">
+</div>-->
+<div>
+    <mat-form-field>
+        <mat-label>Nom du fournisseur</mat-label>
+        <input *ngIf="required" matInput [formControl]="inputControl" [errorStateMatcher]="matcher" [id]="id" [name]="name" [type]="type" [accept]="accept" [(ngModel)]="inputModel" (ngModelChange)="inputModelChange.emit(inputModel)" (change)="change">
+        <input *ngIf="!required" matInput [id]="id" [name]="name" [type]="type" [accept]="accept" [(ngModel)]="inputModel" (ngModelChange)="inputModelChange.emit(inputModel)" (change)="change">
+    </mat-form-field>
 </div>

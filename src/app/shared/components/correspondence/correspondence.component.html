@@ -1,4 +1,4 @@
-<div>
+<!--<div>
     <div class="row" *ngFor="let categ of categs, index as categIndex">
         <div col-3>
             <label [for]="categ">{{ categ }}</label>
@@ -7,6 +7,17 @@
         <select [id]="categ" [(ngModel)]="selected[categIndex]">
             <option *ngFor="let element of headerOptions, index as i" [value]="i">{{ element }}</option>
         </select>
+        <div class="col"></div>
     </div>
-    <app-button [content]="'Valider'" (clickCusto)="onSubmit()"></app-button>
+</div>-->
+<div *ngFor="let categ of categs, index as categIndex">
+    <mat-form-field>
+        <mat-label>{{ categ }}</mat-label>
+        <mat-select [(value)]="selected[categIndex]"> <!-- [(value)]="selected"-->
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let element of headerOptions, index as i" [value]="i">{{ element }}</mat-option>
+        </mat-select>
+    </mat-form-field>
 </div>
+
+<app-button [content]="'Valider'" (clickCusto)="onSubmit()"></app-button>

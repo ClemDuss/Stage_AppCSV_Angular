@@ -39,8 +39,9 @@ export class EditComponent implements OnInit {
   onSubmit(){
     var provider = new Provider();
     provider.name = this.providerName;
+    provider.file = this.providerFile;
     this.providersService.editProvider(provider)
-    this.goToHome();
+    this.router.navigate(['edit/correspondence']);
   }
 
   cancelEditProvider(){

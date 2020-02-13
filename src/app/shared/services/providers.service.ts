@@ -69,6 +69,7 @@ export class ProvidersService {
   deleteProvider(){
     this.providers.splice(this.selectedProviderIndex, 1);
     this.selectedProviderIndex = -1;
+    console.log(this.providers);
     this.setLocalStorageProviders();
     this.setLocalStorageSelectedIndex();
   }
@@ -91,7 +92,16 @@ export class ProvidersService {
   }
 
   getCorrespondence(){
+    console.log(this.providers[this.selectedProviderIndex].correspondence)
     return this.providers[this.selectedProviderIndex].correspondence;
+  }
+
+  isFielExists(providerIndex){
+    if(this.providers[providerIndex].file != null && typeof this.providers[providerIndex].file.name == 'string'){
+      return 'check_circle_outline';
+    }else{
+      return 'not_interested';
+    }
   }
 
   moveProviderUp(){
