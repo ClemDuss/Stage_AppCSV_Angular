@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Provider } from '../models/provider';
+import { toBase64String } from '@angular/compiler/src/output/source_map';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,10 @@ export class ProvidersService {
   }
 
   setLocalStorageProviders(){
+    let jsonArray = [];
+    this.providers.forEach(provider=>{
+      //jsonArray.push({name: provider.name, file: toBase64String(provider.file)})
+    });
     localStorage.setItem("Providers", JSON.stringify(this.providers));
     console.log(JSON.stringify(this.providers));
   }
