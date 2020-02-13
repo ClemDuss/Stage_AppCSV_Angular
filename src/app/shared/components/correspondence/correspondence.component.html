@@ -1,11 +1,12 @@
 <div>
-    <div class="row" *ngFor="let categ of categs">
+    <div class="row" *ngFor="let categ of categs, index as categIndex">
         <div col-3>
-            <label for="{{ categ }}">{{ categ }}</label>
+            <label [for]="categ">{{ categ }}</label>
         </div>
         <div class="col-4"></div>
-        <select id="{{ categ }}">
-            <option *ngFor="let element of headerOptions" value="element">{{ element }}</option>
+        <select [id]="categ" [(ngModel)]="selected[categIndex]">
+            <option *ngFor="let element of headerOptions, index as i" [value]="i">{{ element }}</option>
         </select>
     </div>
+    <app-button [content]="'Valider'" (clickCusto)="onSubmit()"></app-button>
 </div>

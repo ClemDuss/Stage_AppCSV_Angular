@@ -84,6 +84,15 @@ export class ProvidersService {
     }
     this.providers = newProviders;
   }
+  
+  setCorrespondence(correspondenceArray){
+    this.providers[this.selectedProviderIndex].correspondence = correspondenceArray;
+    this.setLocalStorageProviders();
+  }
+
+  getCorrespondence(){
+    return this.providers[this.selectedProviderIndex].correspondence;
+  }
 
   moveProviderUp(){
     if(this.selectedProviderIndex > 0 && this.selectedProviderIndex < this.providers.length){
