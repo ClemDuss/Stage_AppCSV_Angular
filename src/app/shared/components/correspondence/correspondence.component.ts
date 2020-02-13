@@ -14,6 +14,8 @@ export class CorrespondenceComponent implements OnInit {
   headerOptions = [];
   selected;
 
+  correspondence: []
+
   categs = [];
 
   constructor(
@@ -23,7 +25,9 @@ export class CorrespondenceComponent implements OnInit {
   ) { 
     this.headerOptions = csvService.getHeadLine(providersService.getSelectedProvider());
     this.categs.push('EAN', 'Prix d\'ahcat', 'Description', 'Famille d\'article');
-    console.log(providersService.getCorrespondence());
+    console.log('fournisseur : ', providersService.providers[providersService.selectedProviderIndex]);
+    console.log('nom : ', providersService.providers[providersService.selectedProviderIndex].name);
+    console.log('correspondance : ', providersService.providers[providersService.selectedProviderIndex].correspondence);
     if(providersService.getCorrespondence() != null){
       this.selected = providersService.getCorrespondence();
       console.log('hello');

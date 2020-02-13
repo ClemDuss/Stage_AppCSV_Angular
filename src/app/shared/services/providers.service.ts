@@ -67,6 +67,13 @@ export class ProvidersService {
   }
 
   deleteProvider(){
+    var newProviders = [];
+    for(let i=0; i<this.providers.length; i++){
+      if(i != this.selectedProviderIndex){
+        newProviders.push(this.providers[i]);
+      }
+    }
+
     this.providers.splice(this.selectedProviderIndex, 1);
     this.selectedProviderIndex = -1;
     console.log(this.providers);
@@ -92,7 +99,7 @@ export class ProvidersService {
   }
 
   getCorrespondence(){
-    console.log(this.providers[this.selectedProviderIndex].correspondence)
+    console.log(this.providers);
     return this.providers[this.selectedProviderIndex].correspondence;
   }
 
