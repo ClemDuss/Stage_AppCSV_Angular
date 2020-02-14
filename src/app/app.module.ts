@@ -26,6 +26,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { EditProviderComponent } from './view/home/list/edit-provider/edit-provider.component';
 import { DeleteProviderComponent } from './view/home/list/delete-provider/delete-provider.component';
@@ -65,6 +67,8 @@ import { CorrespondenceComponent } from './shared/components/correspondence/corr
     MatSelectModule,
     MatInputModule,
     MatDialogModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot([

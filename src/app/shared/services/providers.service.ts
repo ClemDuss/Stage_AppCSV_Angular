@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Provider } from '../models/provider';
-import { toBase64String } from '@angular/compiler/src/output/source_map';
+import { SnackbarsService } from './snackbars.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,9 @@ export class ProvidersService {
   providers: Array<Provider>;
   selectedProviderIndex;
 
-  constructor() { 
+  constructor(
+    private snackBarService: SnackbarsService,
+  ) { 
     if(localStorage.getItem("Providers") != null){
       this.providers = this.getLocalStorageProviders();
     }else{
@@ -79,13 +81,17 @@ export class ProvidersService {
     this.providers = newProviders;
     this.selectedProviderIndex = this.providers.length-1;
     this.setLocalStorageProviders();
+    this.snackBarService.providerAdded(provider);
   }
 
   deleteProvider(){
     var newProviders = [];
+    let deletedProvider;
     for(let i=0; i<this.providers.length; i++){
       if(i != this.selectedProviderIndex){
         newProviders.push(this.providers[i]);
+      }else{
+        deletedProvider = this.providers[i];
       }
     }
     this.providers = newProviders;
@@ -93,6 +99,8 @@ export class ProvidersService {
     this.selectedProviderIndex = -1;
     this.setLocalStorageProviders();
     this.setLocalStorageSelectedIndex();
+
+    this.snackBarService.deleteProvider(deletedProvider);
   }
 
   editProvider(editedProvider : Provider){
@@ -105,11 +113,13 @@ export class ProvidersService {
       }
     }
     this.providers = newProviders;
+    this.snackBarService.editedProvider();
   }
   
   setCorrespondence(correspondenceArray){
     this.providers[this.selectedProviderIndex].correspondence = correspondenceArray;
     this.setLocalStorageProviders();
+    this.snackBarService.correspondenceSetted(this.providers[this.selectedProviderIndex]);
   }
 
   getCorrespondence(){
