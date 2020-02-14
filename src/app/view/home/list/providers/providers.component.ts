@@ -21,7 +21,7 @@ export class ProvidersComponent implements OnInit {
     this.providers = this.providersService.getProviders();
     this.selectedProvider = this.providersService.getSelectedProvider();
     this.selectedProviderIndex = this.providersService.getSelectedProviderIndex();
-    this.displayedColumns = ['name', 'validFile'];
+    this.displayedColumns = ['name', 'validFile', 'toExport'];
   }
 
   ngOnInit(): void {

@@ -10,6 +10,8 @@
     <div class="col-2" [ngClass]="{ 'displayProviderActions' : providersService.getProviderActionVisible(), 'notDisplayProviderActions' : !providersService.getProviderActionVisible() }">
         <app-edit-provider></app-edit-provider>
         <br/>
+        <app-to-export-provider></app-to-export-provider>
+        <br/>
         <app-delete-provider></app-delete-provider>
     </div>
 </div>

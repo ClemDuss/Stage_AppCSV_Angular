@@ -35,6 +35,7 @@ import { NewProviderComponent } from './view/new-provider/new-provider.component
 import { InputComponent } from './shared/components/input/input.component';
 import { EditComponent } from './view/edit/edit.component';
 import { CorrespondenceComponent } from './shared/components/correspondence/correspondence.component';
+import { ToExportProviderComponent } from './view/home/list/to-export-provider/to-export-provider.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { CorrespondenceComponent } from './shared/components/correspondence/corr
     InputComponent,
     EditComponent,
     CorrespondenceComponent,
+    ToExportProviderComponent,
   ],
   imports: [
     BrowserModule,

@@ -115,6 +115,18 @@ export class ProvidersService {
     this.providers = newProviders;
     this.snackBarService.editedProvider();
   }
+
+  clickCheckProvider(){
+    if(this.providers[this.selectedProviderIndex].toExport){
+      this.providers[this.selectedProviderIndex].toExport = false;
+    }else{
+      this.providers[this.selectedProviderIndex].toExport = true;
+    }
+  }
+
+  getToExport() : boolean{
+    return this.providers[this.selectedProviderIndex].toExport;
+  }
   
   setCorrespondence(correspondenceArray){
     this.providers[this.selectedProviderIndex].correspondence = correspondenceArray;
