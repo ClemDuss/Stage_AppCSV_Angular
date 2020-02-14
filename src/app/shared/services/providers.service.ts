@@ -36,6 +36,7 @@ export class ProvidersService {
         provider.name = jsonProvider.name;
         provider.file = jsonProvider.file;
         provider.correspondence = jsonProvider.correspondence;
+        provider.toExport = jsonProvider.toExport;
         newProviders.push(provider);
       }
     }
@@ -122,6 +123,7 @@ export class ProvidersService {
     }else{
       this.providers[this.selectedProviderIndex].toExport = true;
     }
+    this.setLocalStorageProviders();
   }
 
   getToExport() : boolean{

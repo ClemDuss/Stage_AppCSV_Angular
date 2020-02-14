@@ -24,3 +24,7 @@ mat-list{
     color: white;
     transition: ease 0.25s all;
 }
+
+.col-content-center{
+    text-align: center;
+}

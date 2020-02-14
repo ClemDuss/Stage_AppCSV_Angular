@@ -4,12 +4,12 @@
         <td mat-cell *matCellDef="let element, index as providerId"  [ngClass]="{'selectedProvider': providerId === this.providersService.getSelectedProviderIndex()}" (click)="selectThisProvider(providerId)"> {{element.name}} </td>
     </ng-container>
     <ng-container matColumnDef="validFile">
-        <th mat-header-cell *matHeaderCellDef>Fichier</th>
-        <td mat-cell *matCellDef="let element, index as providerId"  [ngClass]="{'selectedProvider': providerId === this.providersService.getSelectedProviderIndex()}" (click)="selectThisProvider(providerId)"> <i class="material-icons">{{ this.providersService.isFielExists(providerId) }}</i> </td>
+        <th mat-header-cell *matHeaderCellDef class="col-content-center">Fichier</th>
+        <td mat-cell *matCellDef="let element, index as providerId" class="col-content-center" [ngClass]="{'selectedProvider': providerId === this.providersService.getSelectedProviderIndex()}" (click)="selectThisProvider(providerId)"> <i class="material-icons">{{ this.providersService.isFielExists(providerId) }}</i> </td>
     </ng-container>
     <ng-container matColumnDef="toExport">
-        <th mat-header-cell *matHeaderCellDef>À exporter</th>
-        <td mat-cell *matCellDef="let element, index as providerId"  [ngClass]="{'selectedProvider': providerId === this.providersService.getSelectedProviderIndex()}" (click)="selectThisProvider(providerId)">
+        <th mat-header-cell *matHeaderCellDef class="col-content-center">À exporter</th>
+        <td mat-cell *matCellDef="let element, index as providerId" class="col-content-center" [ngClass]="{'selectedProvider': providerId === this.providersService.getSelectedProviderIndex()}" (click)="selectThisProvider(providerId)">
             <span *ngIf="element.toExport"><i class="material-icons">check</i></span>
             <span *ngIf="!element.toExport"><i class="material-icons">clear</i></span>
         </td>
