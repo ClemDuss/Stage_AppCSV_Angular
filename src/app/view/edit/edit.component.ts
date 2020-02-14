@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 import { ProvidersService } from '../../shared/services/providers.service';
+import { DialogsService } from 'src/app/shared/services/dialogs.service';
 
 import { Provider } from '../../shared/models/provider';
 
@@ -27,6 +29,8 @@ export class EditComponent implements OnInit {
   constructor(
     private providersService : ProvidersService,
     private router : Router,
+    private dialogsService: DialogsService,
+    public dialogRef: MatDialogRef<DialogsService>,
   ) { 
     this.provider = this.providersService.getSelectedProvider();
     this.providerName = this.provider.name;
@@ -40,11 +44,11 @@ export class EditComponent implements OnInit {
     this.provider.name = this.providerName;
     this.provider.file = this.providerFile;
     this.providersService.editProvider(this.provider)
-    this.router.navigate(['edit/correspondence']);
+    this.dialogsService.openCorrespondenceDialog();
   }
 
   cancelEditProvider(){
-      this.goToHome();
+      this.dialogRef.close();
   }
 
   goToHome(){

@@ -25,6 +25,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { EditProviderComponent } from './view/home/list/edit-provider/edit-provider.component';
 import { DeleteProviderComponent } from './view/home/list/delete-provider/delete-provider.component';
@@ -63,14 +64,11 @@ import { CorrespondenceComponent } from './shared/components/correspondence/corr
     MatTableModule,
     MatSelectModule,
     MatInputModule,
+    MatDialogModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot([
       { path:'', component: HomeComponent },
-      { path:'new', component: NewProviderComponent },
-      { path:'edit', component: EditComponent},
-      { path:'new/correspondence', component: CorrespondenceComponent },
-      { path:'edit/correspondence', component: CorrespondenceComponent },
     ]),
     BrowserAnimationsModule
   ],

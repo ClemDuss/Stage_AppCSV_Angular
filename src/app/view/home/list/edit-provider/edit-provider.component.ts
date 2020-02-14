@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ProvidersService } from '../../../../shared/services/providers.service';
-import { Router } from '@angular/router';
+import { DialogsService } from 'src/app/shared/services/dialogs.service';
 
 @Component({
   selector: 'app-edit-provider',
@@ -12,15 +11,14 @@ export class EditProviderComponent implements OnInit {
   content = "Modifier";
 
   constructor(
-    private providersService: ProvidersService,
-    private router : Router,
+    private dialogsService: DialogsService,
   ) { }
 
   ngOnInit(): void {
   }
 
   edit(){
-    this.router.navigate(['edit']);
+    this.dialogsService.openEditProviderDialog();
   }
 
 }

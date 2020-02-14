@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ProvidersService } from '../../../shared/services/providers.service';
+import { DialogsService } from 'src/app/shared/services/dialogs.service';
 
 @Component({
   selector: 'app-add-provider',
@@ -11,10 +11,14 @@ export class AddProviderComponent implements OnInit {
   content = "Ajouter un fournisseur";
 
   constructor(
-    private providersService: ProvidersService,
+    private dialogsService: DialogsService,
   ) { }
 
   ngOnInit(): void {
+  }
+
+  openDialog(){
+    this.dialogsService.openNewProviderDialog();
   }
 
 }

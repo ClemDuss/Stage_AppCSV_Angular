@@ -1,6 +1,6 @@
-<div>
+<h2 mat-dialog-title>Modifier un fournisseur</h2>
+<mat-dialog-content>
     <app-input [label]="nameLabel" [id]="nameId" [name]="'name'" [(inputModel)]="providerName"></app-input>
-    <!--<app-input [label]="fileLabel" [type]="'file'" [accept]="'.csv'" [id]="fileId" [name]="'file'" [(inputModel)]="providerFile" [change]="updateFile('$event.target.files')"></app-input>-->
     <div>
         <label>Fichier :</label>
         <input type="file" #csvReader name="Upload CSV" id="txtFileUpload" (change)="updateFile($event.target.files)" accept=".csv" />
@@ -8,4 +8,4 @@
     
     <app-button [type]="'button'" (clickCusto)="cancelEditProvider()" [content]="cancelContentButton"></app-button>
     <app-button [type]="'submit'" (clickCusto)="onSubmit()" [content]="addProviderContentButton"></app-button>
-</div>
+</mat-dialog-content>

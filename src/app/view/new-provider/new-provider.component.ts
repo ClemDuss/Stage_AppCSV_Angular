@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { MatDialogRef } from '@angular/material/dialog';
 
 import { ProvidersService } from '../../shared/services/providers.service';
-import { Router } from '@angular/router';
+import { DialogsService } from 'src/app/shared/services/dialogs.service';
 
 import { Provider } from '../../shared/models/provider';
 
@@ -29,6 +31,8 @@ export class NewProviderComponent implements OnInit {
   constructor(
     private providersService : ProvidersService,
     private router: Router,
+    private dialogsService: DialogsService,
+    public dialogRef: MatDialogRef<DialogsService>,
   ) {}
 
   ngOnInit(): void {
@@ -39,11 +43,11 @@ export class NewProviderComponent implements OnInit {
     provider.name = this.providerName;
     provider.file = this.providerFile;
     this.providersService.addProvider(provider)
-    this.router.navigate(['new/correspondence']);
+    this.dialogsService.openCorrespondenceDialog();
   }
 
   cancelAddProvider(){
-    this.goToHome();
+    this.dialogRef.close();
   }
 
   goToHome(){

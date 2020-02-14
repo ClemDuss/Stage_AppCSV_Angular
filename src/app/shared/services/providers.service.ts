@@ -65,8 +65,18 @@ export class ProvidersService {
     }
   }
 
+  resetSelectedIndex(){
+    this.selectedProviderIndex = -1;
+    this.setLocalStorageSelectedIndex();
+  }
+
   addProvider(provider : Provider){
-    this.providers.push(provider);
+    var newProviders = [];
+    for(let i=0; i<this.providers.length; i++){
+      newProviders.push(this.providers[i]);
+    }
+    newProviders.push(provider);
+    this.providers = newProviders;
     this.selectedProviderIndex = this.providers.length-1;
     this.setLocalStorageProviders();
   }
