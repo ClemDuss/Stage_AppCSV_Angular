@@ -18,7 +18,7 @@ export class CreateCsvComponent implements OnInit {
   }
 
   export(){
-    this.csvsService.exportCSV();
+    this.csvsService.exportFinalCSV();
   }
 
 }

@@ -167,6 +167,8 @@ export class ProvidersService {
       this.providers = newProviders;
       this.selectedProviderIndex--;
     }
+    this.setLocalStorageProviders();
+    this.setLocalStorageSelectedIndex();
   }
 
   moveProviderDown(){
@@ -187,6 +189,8 @@ export class ProvidersService {
       this.providers = newProviders;
       this.selectedProviderIndex++;
     }
+    this.setLocalStorageProviders();
+    this.setLocalStorageSelectedIndex();
   }
 
   getProviders(){
