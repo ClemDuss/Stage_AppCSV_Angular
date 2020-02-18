@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ProvidersService } from './providers.service';
 
 import { Provider } from '../models/provider';
+import { saveAs } from 'file-saver';
 
 @Injectable({
   providedIn: 'root'
@@ -63,6 +64,8 @@ export class CsvService {
     let fileName = 'Articles';
     let downloadElementId = 'articles';
     let fileContent = 'code_article;code_fournisseur;code_famille_article;Description;EAN;Prix_Achat\n';
+    let fileContentBlob = fileContent;
+    let finalBlob: Blob;
 
     this.initFile(fileContent, fileName, downloadElementId);
     let readers: Array<FileReader> = [];
@@ -115,8 +118,11 @@ export class CsvService {
                   }
                   let prixAchat = csvRecordsArray[j].split(';')[this.providers[i].correspondence[1]];
                   let description = csvRecordsArray[j].split(';')[this.providers[i].correspondence[2]];
-                  fileContent += articleCode + ';' + providerCode + ';' + categoryCode + ';' + description + ';' + ean + ';' + prixAchat + '\n';
-                  articleNumber++;
+                  if(description != ""){
+                    fileContent += articleCode + ';' + providerCode + ';' + categoryCode + ';' + description + ';' + ean + ';' + prixAchat + '\n';
+                    fileContentBlob += articleCode + ';' + providerCode + ';' + categoryCode + ';' + description + ';' + ean + ';' + prixAchat + '\n';
+                    articleNumber++;
+                  }
                 }
               }
             };
@@ -126,7 +132,13 @@ export class CsvService {
               providerNumber++;
               console.log(providerNumber + '|' + numberToExport);
               if(providerNumber == numberToExport){
-                this.downloadFile(downloadElementId);
+                //this.downloadFile(downloadElementId);
+                finalBlob = new Blob([fileContentBlob], {
+                  type: "text/plain;charset=utf-8"
+                });
+                //const url= window.URL.createObjectURL(finalBlob);
+                //window.open(url);
+                saveAs(finalBlob, fileName+'.csv');
               }
             };
           }
@@ -144,6 +156,8 @@ export class CsvService {
     let fileName = 'Familles_Articles';
     let fileContent = 'ID_Famille_Article;Nom_Famille_Article\n';
     fileContent += categoryList[0].code + ';' + categoryList[0].name + '\n';
+    let finalBlob : Blob;
+    let fileContentBlob = fileContent;
 
     this.initFile(fileContent, fileName, downloadElementId);
     let readers: Array<FileReader> = [];
@@ -184,6 +198,7 @@ export class CsvService {
                       let categoryCode = this.generateCategoryCode(categNumber);
                       categoryList.push({code: categoryCode, name: categoryName});
                       fileContent += categoryCode + ';' + categoryName + '\n';
+                      fileContentBlob += categoryCode + ';' + categoryName + '\n';
                       categNumber++;
                     }
                   }
@@ -195,8 +210,12 @@ export class CsvService {
               this.appendFile(fileContent, downloadElementId);
               providerNumber++;
               if(providerNumber == numberToExport){
-                this.downloadFile(downloadElementId);
+                //this.downloadFile(downloadElementId);
                 this.categoryNamesList = categoryList;
+                finalBlob = new Blob([fileContentBlob], {
+                  type: "text/plain;charset=utf-8"
+                });
+                saveAs(finalBlob, fileName + '.csv');
                 this.exportArticles(this.totalProvidersList, this.categoryNamesList);
               }
             };
@@ -214,6 +233,7 @@ export class CsvService {
     let providersList = []
     let fileName = 'Fournisseurs';
     let fileContent = 'Fournisseur_ID;Nom_Fournisseur\n';
+    let finalBlob : Blob;
 
     for(let i=0; i<this.providers.length; i++){
       if(this.providers[i].toExport){
@@ -223,8 +243,13 @@ export class CsvService {
         providersList.push({code: providerCode, name: providerName});
       }
     }
+    
+    finalBlob = new Blob([fileContent], {
+      type: "text/plain;charset=utf-8"
+    });
 
-    this.createFile(fileContent, fileName);
+    saveAs(finalBlob, fileName + '.csv');
+    //this.createFile(fileContent, fileName);
 
     this.totalProvidersList = providersList;
     //return providersList;
