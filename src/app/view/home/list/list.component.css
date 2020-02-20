@@ -1,5 +1,6 @@
 .displayProviderActions{
     display: block;
+    text-align: center;
 }
 
 .notDisplayProviderActions{

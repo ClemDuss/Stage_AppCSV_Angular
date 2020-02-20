@@ -11,14 +11,14 @@ export class AddProviderComponent implements OnInit {
   content = "Ajouter un fournisseur";
 
   constructor(
-    private dialogsService: DialogsService,
+    private _dialogsService: DialogsService,
   ) { }
 
   ngOnInit(): void {
   }
 
   openDialog(){
-    this.dialogsService.openNewProviderDialog();
+    this._dialogsService.openNewProviderDialog();
   }
 
 }

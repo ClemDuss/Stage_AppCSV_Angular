@@ -12,6 +12,12 @@ export class SnackbarsService {
     private _snackBar: MatSnackBar
   ) { }
 
+  snackbar(message: string, action: string = 'OK', delay:number = 3000){
+    this._snackBar.open(message, action, {
+      duration: delay,
+    });
+  }
+
   providerAdded(provider: Provider){
     this._snackBar.open('Le fournisseur ' + provider.name + ' a été créé.', 'OK', {
       duration: 3000,

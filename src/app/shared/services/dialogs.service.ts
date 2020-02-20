@@ -6,6 +6,8 @@ import { ProvidersService } from "./providers.service";
 import { NewProviderComponent } from '../../view/new-provider/new-provider.component';
 import { EditComponent } from '../../view/edit/edit.component';
 import { CorrespondenceComponent } from '../components/correspondence/correspondence.component';
+import { InExportComponent } from 'src/app/view/in-export/in-export.component';
+import { CsvService } from './csv.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,7 @@ export class DialogsService {
   constructor(
     public dialog: MatDialog,
     private providersService: ProvidersService,
+    private csvService: CsvService,
   ) { }
 
   openNewProviderDialog() {
@@ -42,9 +45,17 @@ export class DialogsService {
 
   openEditProviderDialog(){
     const dialogRef = this.dialog.open(EditComponent);
+  }
+
+  openExportDialog(){
+    const dialogRef = this.dialog.open(InExportComponent);
 
     dialogRef.afterClosed().subscribe(result => {
-      //console.log(`Dialog result: ${result}`);
+      this.csvService.resetExportStates();
     });
+  }
+
+  closeExportDialog(){
+    this.dialog.closeAll();
   }
 }

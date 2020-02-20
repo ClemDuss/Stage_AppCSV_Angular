@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Export en cours...</h2>
+<mat-dialog-content>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <div *ngFor="let fileName of filesNames, index as i">
+        <span *ngIf="exportStatus != null">
+            <mat-icon *ngIf="exportStatus[i].state == 'done'">check</mat-icon>
+            <mat-icon *ngIf="exportStatus[i].state == 'progress'">loop</mat-icon>
+        </span>
+        {{ fileName }}.csv
+    </div>
+    <div class="providerName" *ngFor="let provider of providers, index as i">
+        <div *ngIf="providers[i].toExport">
+            <span *ngIf="exportArticleDetailsState != null">
+                <mat-icon *ngIf="exportArticleDetailsState[i].state == 'done'">check</mat-icon>
+                <mat-icon *ngIf="exportArticleDetailsState[i].state == 'progress'">loop</mat-icon>
+            </span>
+            {{ provider.name }}
+        </div>
+    </div>
+    <app-button *ngIf="isExportEnded == true" [content]="'OK'" (clickCusto)="okClick()"></app-button>
+</mat-dialog-content>

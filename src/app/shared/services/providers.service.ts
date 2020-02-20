@@ -63,14 +63,25 @@ export class ProvidersService {
   getProviderActionVisible(){
     if(this.selectedProviderIndex > -1){
       return true;
-    }else{
-      return false;
     }
+    return false;
   }
 
   resetSelectedIndex(){
     this.selectedProviderIndex = -1;
     this.setLocalStorageSelectedIndex();
+  }
+
+  setSelectedIndex(action){
+    if(action == 'up'){
+      if(this.selectedProviderIndex<this.providers.length-1){
+        this.selectedProviderIndex++;
+      }
+    }else if(action == 'down'){
+      if(this.selectedProviderIndex>0){
+        this.selectedProviderIndex--;
+      }
+    }
   }
 
   addProvider(provider : Provider){
@@ -127,7 +138,11 @@ export class ProvidersService {
   }
 
   getToExport() : boolean{
-    return this.providers[this.selectedProviderIndex].toExport;
+    if(this.selectedProviderIndex > -1){
+      return this.providers[this.selectedProviderIndex].toExport;
+    }else{
+      return false;
+    }
   }
   
   setCorrespondence(correspondenceArray){
@@ -166,9 +181,9 @@ export class ProvidersService {
       }
       this.providers = newProviders;
       this.selectedProviderIndex--;
+      this.setLocalStorageProviders();
+      this.setLocalStorageSelectedIndex();
     }
-    this.setLocalStorageProviders();
-    this.setLocalStorageSelectedIndex();
   }
 
   moveProviderDown(){
@@ -188,9 +203,9 @@ export class ProvidersService {
       }
       this.providers = newProviders;
       this.selectedProviderIndex++;
+      this.setLocalStorageProviders();
+      this.setLocalStorageSelectedIndex();
     }
-    this.setLocalStorageProviders();
-    this.setLocalStorageSelectedIndex();
   }
 
   getProviders(){

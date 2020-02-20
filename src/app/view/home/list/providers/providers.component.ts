@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProvidersService } from '../../../../shared/services/providers.service';
 
 import { Provider } from '../../../../shared/models/provider';
+import { DialogsService } from 'src/app/shared/services/dialogs.service';
 
 @Component({
   selector: 'app-providers',
@@ -17,6 +18,7 @@ export class ProvidersComponent implements OnInit {
 
   constructor(
     public providersService: ProvidersService,
+    private dialogsService: DialogsService,
   ) {
     this.providers = this.providersService.getProviders();
     this.selectedProvider = this.providersService.getSelectedProvider();
@@ -31,6 +33,10 @@ export class ProvidersComponent implements OnInit {
     this.providersService.setSelectedProvider(index);
     this.selectedProvider = this.providersService.getSelectedProvider();
     this.selectedProviderIndex = this.providersService.getSelectedProviderIndex();
+  }
+
+  openEditProviderDialog(){
+    this.dialogsService.openEditProviderDialog();
   }
 
 }

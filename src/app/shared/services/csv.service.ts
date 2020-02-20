@@ -4,6 +4,8 @@ import { ProvidersService } from './providers.service';
 
 import { Provider } from '../models/provider';
 import { saveAs } from 'file-saver';
+import { Subject, Observable, observable } from 'rxjs';
+import { DialogsService } from './dialogs.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +15,35 @@ export class CsvService {
   categoryNamesList;
   totalProvidersList;
 
+  filesNames: any [];
+  exportStatus = new Subject<any>();
+  exportStates:[{name:string, state:string}];
+
+  observableExportArticleDetailsState = new Subject<any>();
+  exportArticleDetailsState: [{name: string, state: string}];
+
+  isExportEnded = new Subject<boolean>();
+
+  progressOpenFile = new Subject<number>();
+
   constructor(
     private providersService : ProvidersService,
   ) {
     this.providers = this.providersService.providers;
+    this.filesNames = [];
+    this.filesNames.push('Fournisseurs');
+    this.filesNames.push("Familles_Articles");
+    this.filesNames.push("Articles");
+
+    this.isExportEnded.next(false);
+    
+    this.exportStates = [{name: '--', state: '--'}];
+    this.filesNames.forEach(fileName => {
+      this.exportStates.push({name:fileName, state: 'progress'})
+    });
+    this.exportStates.shift();
+    console.log(this.exportStates);
+    this.exportStatus.next(this.exportStates);
   }
 
   exportCSV(){
@@ -27,14 +54,71 @@ export class CsvService {
     }
   }
 
+  getOpenFileProgression(): Observable<number>{
+    return this.progressOpenFile.asObservable();
+  }
+
+  getExportFileStatus(): Observable<any>{
+    return this.exportStatus.asObservable();
+  }
+
+  getExportArticleDetailsState(): Observable<any>{
+    return this.observableExportArticleDetailsState.asObservable();
+  }
+
+  getIsExportEnded(): Observable<boolean>{
+    return this.isExportEnded.asObservable();
+  }
+
+  resetExportStates(){
+    this.exportStates.forEach(element => {
+      element.state = 'progress';
+    });
+    this.exportArticleDetailsState.forEach(element => {
+      element.state = 'progress';
+    });
+  }
+
   getHeadLine(provider: Provider) : any[] {
     let file = provider.file;
+    this.progressOpenFile.next(0);
     if(file){
-      var reader = new FileReader();
-      reader.readAsText(file);
       let headerArray = [];  
+      new Promise((resolve, reject)=>{
+        var reader = new FileReader();
+      
+        reader.onprogress=(e)=>{
+          this.progressOpenFile.next(e.loaded*100/e.total);
+          //this.progressOpenFile = 100;
+        };
+        
+        reader.onload= (e) =>{
+          let csvData = reader.result;
+          let csvRecordsArray = (<string>csvData).split(/\r\n|\n/);
+  
+          let headers = (<string>csvRecordsArray[0]).split(';');  
+          for (let j = 0; j < headers.length; j++) {
+            headerArray.push(headers[j]);  
+          }
+        };
 
-      reader.onload= () =>{
+        reader.onloadend=(e)=>{
+          let csvData = reader.result;
+          let csvRecordsArray = (<string>csvData).split(/\r\n|\n/);
+          resolve(csvRecordsArray);
+        };
+
+        reader.readAsText(file);
+      });
+
+      /*var reader = new FileReader();
+      let headerArray = []; 
+      
+      reader.onprogress=(e)=>{
+        this.progressOpenFile = e.loaded*100/e.total;
+      };
+
+      reader.onload= (e) =>{
         let csvData = reader.result;
         let csvRecordsArray = (<string>csvData).split(/\r\n|\n/);
 
@@ -46,13 +130,35 @@ export class CsvService {
 
       reader.onerror = function(){
       };
+      reader.readAsText(file);
       
-      return headerArray;
+      return headerArray;*/
+          return headerArray;
     }
+  }
+
+  aFileNotExist() : boolean{
+    this.providers = this.providersService.providers;
+    let aFileIsUndefined: boolean = false;
+    this.providers.forEach(prov => {
+      if(prov.toExport){
+        if(prov.file == undefined || prov.file.name == undefined){
+          aFileIsUndefined = true;
+        }
+      }
+    });
+    return aFileIsUndefined;
   }
 
   exportFinalCSV(){
     this.providers = this.providersService.providers;
+    this.exportArticleDetailsState = [{name: '--', state: '--'}];
+    this.providers.forEach(prov => {
+      this.exportArticleDetailsState.push({name: prov.name, state: 'progress'});
+    });
+    this.exportArticleDetailsState.shift();
+    this.observableExportArticleDetailsState.next(this.exportArticleDetailsState);
+
     //this.exportArticles(this.exportProviders(), this.exportCategoryNames());
     this.exportProviders();
     this.exportCategoryNames();
@@ -131,14 +237,28 @@ export class CsvService {
               this.appendFile(fileContent, downloadElementId);
               providerNumber++;
               console.log(providerNumber + '|' + numberToExport);
+              this.exportArticleDetailsState.forEach(element => {
+                if(element.name == this.providers[i].name){
+                  element.state = 'done';
+                }
+              });
+              this.observableExportArticleDetailsState.next(this.exportArticleDetailsState);
               if(providerNumber == numberToExport){
                 //this.downloadFile(downloadElementId);
                 finalBlob = new Blob([fileContentBlob], {
                   type: "text/plain;charset=utf-8"
                 });
+                this.exportStates.forEach(statu => {
+                  if(statu.name == this.exportStates[0+2].name){
+                    statu.state = 'done';
+                  }
+                });
+                this.exportStatus.next(this.exportStates);
                 //const url= window.URL.createObjectURL(finalBlob);
                 //window.open(url);
                 saveAs(finalBlob, fileName+'.csv');
+
+                this.isExportEnded.next(true);
               }
             };
           }
@@ -215,6 +335,12 @@ export class CsvService {
                 finalBlob = new Blob([fileContentBlob], {
                   type: "text/plain;charset=utf-8"
                 });
+                this.exportStates.forEach(statu => {
+                  if(statu.name == this.exportStates[0+1].name){
+                    statu.state = 'done';
+                  }
+                });
+                this.exportStatus.next(this.exportStates);
                 saveAs(finalBlob, fileName + '.csv');
                 this.exportArticles(this.totalProvidersList, this.categoryNamesList);
               }
@@ -247,6 +373,12 @@ export class CsvService {
     finalBlob = new Blob([fileContent], {
       type: "text/plain;charset=utf-8"
     });
+    this.exportStates.forEach(statu => {
+      if(statu.name == this.exportStates[0].name){
+        statu.state = 'done';
+      }
+    });
+    this.exportStatus.next(this.exportStates);
 
     saveAs(finalBlob, fileName + '.csv');
     //this.createFile(fileContent, fileName);

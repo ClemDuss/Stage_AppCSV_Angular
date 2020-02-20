@@ -39,11 +39,22 @@ export class NewProviderComponent implements OnInit {
   }
 
   onSubmit(){
+    let addingIsPossible = true;
     var provider = new Provider();
     provider.name = this.providerName;
     provider.file = this.providerFile;
-    this.providersService.addProvider(provider)
-    this.dialogsService.openCorrespondenceDialog();
+
+    if(provider.name == ""){
+      addingIsPossible = false;
+    }
+    if(provider.file == undefined || provider.file.name.substr(provider.file.name.length-4, 4) != '.csv'){
+      addingIsPossible = false;
+    }
+
+    if(addingIsPossible){
+      this.providersService.addProvider(provider)
+      this.dialogsService.openCorrespondenceDialog();
+    }
   }
 
   cancelAddProvider(){

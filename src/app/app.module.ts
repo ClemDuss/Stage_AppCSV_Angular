@@ -28,6 +28,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTreeModule } from '@angular/material/tree';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { EditProviderComponent } from './view/home/list/edit-provider/edit-provider.component';
 import { DeleteProviderComponent } from './view/home/list/delete-provider/delete-provider.component';
@@ -36,6 +39,7 @@ import { InputComponent } from './shared/components/input/input.component';
 import { EditComponent } from './view/edit/edit.component';
 import { CorrespondenceComponent } from './shared/components/correspondence/correspondence.component';
 import { ToExportProviderComponent } from './view/home/list/to-export-provider/to-export-provider.component';
+import { InExportComponent } from './view/in-export/in-export.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +59,7 @@ import { ToExportProviderComponent } from './view/home/list/to-export-provider/t
     EditComponent,
     CorrespondenceComponent,
     ToExportProviderComponent,
+    InExportComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,6 +76,9 @@ import { ToExportProviderComponent } from './view/home/list/to-export-provider/t
     MatDialogModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatTreeModule,
+    MatExpansionModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot([

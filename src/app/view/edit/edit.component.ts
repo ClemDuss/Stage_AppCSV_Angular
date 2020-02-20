@@ -41,10 +41,21 @@ export class EditComponent implements OnInit {
   }
 
   onSubmit(){
+    let addingIsPossible = true;
     this.provider.name = this.providerName;
     this.provider.file = this.providerFile;
-    this.providersService.editProvider(this.provider)
-    this.dialogsService.openCorrespondenceDialog();
+
+    if(this.provider.name == ""){
+      addingIsPossible = false;
+    }
+    if(this.provider.file == undefined || this.provider.file.name == undefined){
+      addingIsPossible = false;
+    }
+
+    if(addingIsPossible){
+      this.providersService.editProvider(this.provider)
+      this.dialogsService.openCorrespondenceDialog();
+    }
   }
 
   cancelEditProvider(){

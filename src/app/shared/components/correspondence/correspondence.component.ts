@@ -6,6 +6,7 @@ import { ProvidersService } from '../../services/providers.service';
 import { DialogsService } from 'src/app/shared/services/dialogs.service';
 
 import { CsvService } from '../../services/csv.service';
+import { Subscribable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-correspondence',
@@ -21,9 +22,12 @@ export class CorrespondenceComponent implements OnInit {
 
   categs = [];
 
+  loadFileProgression;
+  subscribrLoadFileProgression: Subscription;
+
   constructor(
     private providersService: ProvidersService,
-    private csvService: CsvService,
+    public csvService: CsvService,
     private router: Router,
     private dialogsService: DialogsService,
     public dialogRef: MatDialogRef<DialogsService>,
@@ -35,6 +39,10 @@ export class CorrespondenceComponent implements OnInit {
     }else{
       this.selected = [];
     }
+
+    this.subscribrLoadFileProgression = csvService.getOpenFileProgression().subscribe((data)=>{
+      this.loadFileProgression=data;
+    });
   }
 
   ngOnInit(): void {
@@ -49,6 +57,10 @@ export class CorrespondenceComponent implements OnInit {
 
   goToHome(){
     this.router.navigate(['']);
+  }
+
+  ngOnDestroy(): void {
+    this.subscribrLoadFileProgression.unsubscribe;
   }
 
 }
