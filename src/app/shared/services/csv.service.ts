@@ -5,7 +5,6 @@ import { ProvidersService } from './providers.service';
 import { Provider } from '../models/provider';
 import { saveAs } from 'file-saver';
 import { Subject, Observable, observable } from 'rxjs';
-import { DialogsService } from './dialogs.service';
 
 @Injectable({
   providedIn: 'root'
@@ -42,35 +41,29 @@ export class CsvService {
       this.exportStates.push({name:fileName, state: 'progress'})
     });
     this.exportStates.shift();
-    console.log(this.exportStates);
     this.exportStatus.next(this.exportStates);
   }
 
-  exportCSV(){
-    for(let i=0; i<this.providersService.providers.length; i++){
-      let headerOptions;
-      headerOptions = this.getHeadLine(this.providersService.providers[i]);
-      console.log(headerOptions);
-    }
-  }
-
-  getOpenFileProgression(): Observable<number>{
+  public getOpenFileProgression(): Observable<number>{
     return this.progressOpenFile.asObservable();
   }
 
-  getExportFileStatus(): Observable<any>{
+  public getExportFileStatus(): Observable<any>{
     return this.exportStatus.asObservable();
   }
 
-  getExportArticleDetailsState(): Observable<any>{
+  public getExportArticleDetailsState(): Observable<any>{
     return this.observableExportArticleDetailsState.asObservable();
   }
 
-  getIsExportEnded(): Observable<boolean>{
+  public getIsExportEnded(): Observable<boolean>{
     return this.isExportEnded.asObservable();
   }
 
-  resetExportStates(){
+  /**
+   * Remet à zéro les états d'exports des fichier
+   */
+  public resetExportStates(): void{
     this.exportStates.forEach(element => {
       element.state = 'progress';
     });
@@ -79,7 +72,11 @@ export class CsvService {
     });
   }
 
-  getHeadLine(provider: Provider) : any[] {
+  /**
+   * Retourne un tableau contenant toutes les en-tête des colonnes du fichier fournisseur
+   * @param provider Fournisseur dont on shouaite récupérer l'en-tête du fichier
+   */
+  public getHeadLine(provider: Provider) : any[] {
     let file = provider.file;
     this.progressOpenFile.next(0);
     if(file){
@@ -89,7 +86,6 @@ export class CsvService {
       
         reader.onprogress=(e)=>{
           this.progressOpenFile.next(e.loaded*100/e.total);
-          //this.progressOpenFile = 100;
         };
         
         reader.onload= (e) =>{
@@ -110,34 +106,15 @@ export class CsvService {
 
         reader.readAsText(file);
       });
-
-      /*var reader = new FileReader();
-      let headerArray = []; 
-      
-      reader.onprogress=(e)=>{
-        this.progressOpenFile = e.loaded*100/e.total;
-      };
-
-      reader.onload= (e) =>{
-        let csvData = reader.result;
-        let csvRecordsArray = (<string>csvData).split(/\r\n|\n/);
-
-        let headers = (<string>csvRecordsArray[0]).split(';');  
-        for (let j = 0; j < headers.length; j++) {  
-          headerArray.push(headers[j]);  
-        }
-      };
-
-      reader.onerror = function(){
-      };
-      reader.readAsText(file);
-      
-      return headerArray;*/
-          return headerArray;
+      return headerArray;
     }
   }
 
-  aFileNotExist() : boolean{
+  /**
+   * Retourne 'true' si au moins un des fournisseurs
+   * à exporter ne contient pas de fichier.
+   */
+  public someFileNotExist() : boolean{
     this.providers = this.providersService.providers;
     let aFileIsUndefined: boolean = false;
     this.providers.forEach(prov => {
@@ -150,7 +127,18 @@ export class CsvService {
     return aFileIsUndefined;
   }
 
-  exportFinalCSV(){
+  /**
+   * Action contraire de someFileNotExist()
+   */
+  public everyFilesExists(): boolean{
+    return !this.someFileNotExist();
+  }
+
+  /**
+   * Fonction a appeler depuis la vue pour réaliser l'export final.
+   * Cette fonction s'occupe d'appeler les autres fonctions d'export pour chaque fichiers individuels.
+   */
+  public exportFinalCSV(): void{
     this.providers = this.providersService.providers;
     this.exportArticleDetailsState = [{name: '--', state: '--'}];
     this.providers.forEach(prov => {
@@ -159,21 +147,24 @@ export class CsvService {
     this.exportArticleDetailsState.shift();
     this.observableExportArticleDetailsState.next(this.exportArticleDetailsState);
 
-    //this.exportArticles(this.exportProviders(), this.exportCategoryNames());
     this.exportProviders();
     this.exportCategoryNames();
   }
 
-  exportArticles(providersList, categoryList){
+  /**
+   * Fonction effectuant la création du fichier 'Articles.csv' et son export
+   * @param providersList Liste des fournisseurs (à exporter)
+   * @param categoryList Liste des familles d'articles
+   */
+  private exportArticles(providersList, categoryList): void{
     let articleNumber = 1;
     let providerNumber = 0;
     let fileName = 'Articles';
     let downloadElementId = 'articles';
-    let fileContent = 'code_article;code_fournisseur;code_famille_article;Description;EAN;Prix_Achat\n';
+    let fileContent = 'code_article;code_fournisseur;code_famille_article;Description;EAN;Prix_Achat;Reporter_PAnet_sur_PA;Fournisseur_Principal\n';
     let fileContentBlob = fileContent;
     let finalBlob: Blob;
 
-    this.initFile(fileContent, fileName, downloadElementId);
     let readers: Array<FileReader> = [];
 
     let numberToExport = 0;
@@ -219,14 +210,22 @@ export class CsvService {
                   });
 
                   let ean = csvRecordsArray[j].split(';')[this.providers[i].correspondence[0]];
+                  if(ean != '' && typeof Number(ean) == 'number'){
+                    articleCode = ean;
+                  }
                   if(ean == "" || typeof Number(ean) != "number"){
-                    ean = articleCode;
+                    ean = "";
                   }
                   let prixAchat = csvRecordsArray[j].split(';')[this.providers[i].correspondence[1]];
+                  prixAchat = prixAchat.replace('ï¿½', '');
+                  prixAchat = prixAchat.replace('�', '');
+                  prixAchat = prixAchat.replace('€', '');
+                  prixAchat = prixAchat.replace('.', ',');
+                  prixAchat = prixAchat.trim();
                   let description = csvRecordsArray[j].split(';')[this.providers[i].correspondence[2]];
                   if(description != ""){
-                    fileContent += articleCode + ';' + providerCode + ';' + categoryCode + ';' + description + ';' + ean + ';' + prixAchat + '\n';
-                    fileContentBlob += articleCode + ';' + providerCode + ';' + categoryCode + ';' + description + ';' + ean + ';' + prixAchat + '\n';
+                    fileContent += articleCode + ';' + providerCode + ';' + categoryCode + ';' + description + ';' + ean + ';' + prixAchat + ';1;1\n';
+                    fileContentBlob += articleCode + ';' + providerCode + ';' + categoryCode + ';' + description + ';' + ean + ';' + prixAchat + ';1;1\n';
                     articleNumber++;
                   }
                 }
@@ -234,9 +233,7 @@ export class CsvService {
             };
 
             readers[i].onloadend=()=>{
-              this.appendFile(fileContent, downloadElementId);
               providerNumber++;
-              console.log(providerNumber + '|' + numberToExport);
               this.exportArticleDetailsState.forEach(element => {
                 if(element.name == this.providers[i].name){
                   element.state = 'done';
@@ -244,18 +241,17 @@ export class CsvService {
               });
               this.observableExportArticleDetailsState.next(this.exportArticleDetailsState);
               if(providerNumber == numberToExport){
-                //this.downloadFile(downloadElementId);
                 finalBlob = new Blob([fileContentBlob], {
                   type: "text/plain;charset=utf-8"
                 });
                 this.exportStates.forEach(statu => {
                   if(statu.name == this.exportStates[0+2].name){
+                    //l'index 2 correspond à l'état d'export du fichier Articles dans this.exportStates
+                    //'0+2' car '2' posait problème
                     statu.state = 'done';
                   }
                 });
                 this.exportStatus.next(this.exportStates);
-                //const url= window.URL.createObjectURL(finalBlob);
-                //window.open(url);
                 saveAs(finalBlob, fileName+'.csv');
 
                 this.isExportEnded.next(true);
@@ -267,7 +263,10 @@ export class CsvService {
     }
   }
 
-  exportCategoryNames(){
+  /**
+   * Fonction effectuant la création du fichier 'Familles_Articles.csv' et son export
+   */
+  private exportCategoryNames(): void{
     let categoryList = [];
     categoryList.push({code:'FAR00000', name:'Famille Incounnue'});
     let categNumber = 1;
@@ -279,7 +278,6 @@ export class CsvService {
     let finalBlob : Blob;
     let fileContentBlob = fileContent;
 
-    this.initFile(fileContent, fileName, downloadElementId);
     let readers: Array<FileReader> = [];
 
     let numberToExport = 0;
@@ -327,16 +325,16 @@ export class CsvService {
             };
 
             readers[i].onloadend=()=>{
-              this.appendFile(fileContent, downloadElementId);
               providerNumber++;
               if(providerNumber == numberToExport){
-                //this.downloadFile(downloadElementId);
                 this.categoryNamesList = categoryList;
                 finalBlob = new Blob([fileContentBlob], {
                   type: "text/plain;charset=utf-8"
                 });
                 this.exportStates.forEach(statu => {
                   if(statu.name == this.exportStates[0+1].name){
+                    //l'index 1 correspond à l'état d'export du fichier Familles dans this.exportStates
+                    //'0+1' car '1' posait problème
                     statu.state = 'done';
                   }
                 });
@@ -355,7 +353,10 @@ export class CsvService {
     }
   }
 
-  exportProviders(){
+  /**
+   * Fonction effectuant la création du fichier 'Fournisseurs.csv' et son export
+   */
+  private exportProviders(): void{
     let providersList = []
     let fileName = 'Fournisseurs';
     let fileContent = 'Fournisseur_ID;Nom_Fournisseur\n';
@@ -375,61 +376,23 @@ export class CsvService {
     });
     this.exportStates.forEach(statu => {
       if(statu.name == this.exportStates[0].name){
+        //l'index 0 correspond à l'état d'export du fichier fournisseurs dans this.exportStates
         statu.state = 'done';
       }
     });
     this.exportStatus.next(this.exportStates);
 
     saveAs(finalBlob, fileName + '.csv');
-    //this.createFile(fileContent, fileName);
 
     this.totalProvidersList = providersList;
-    //return providersList;
   }
 
-  initFile(headLine, fileTitle, elementId){
-    var element = document.createElement('a');
-    element.setAttribute('id', elementId);
-    element.setAttribute('download', fileTitle + '.csv');
-
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(headLine));
-
-    element.style.display = 'block';
-    document.body.appendChild(element);
-  }
-
-  appendFile(fileContentToAdd, elementId){
-    var element = document.getElementById(elementId);
-    let content = element.getAttribute('href');
-    content += encodeURIComponent(fileContentToAdd);
-    element.setAttribute('href', content);
-  }
-
-  downloadFile(elementId){
-    var element = document.getElementById(elementId);
-
-    console.log(element.getAttribute('href'));
-    console.log(element);
-    element.click();
-
-    document.body.removeChild(element);
-  }
-
-  createFile(fileContent, fileTitle){
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileContent));
-    element.setAttribute('download', fileTitle + '.csv');
-
-    element.style.display = 'none';
-    document.body.appendChild(element);
-
-    element.click();
-
-    document.body.removeChild(element);
-  }
-
-  generateProviderCode(nb): string{
-    let providerCode;
+  /**
+   * Génère et retourne le code fournisseur
+   * @param nb Numéro du fournisseur
+   */
+  private generateProviderCode(nb: number): string{
+    let providerCode: string;
     if (nb < 10)
       providerCode = "FR0000" + nb;
     else if (nb < 100)
@@ -443,8 +406,12 @@ export class CsvService {
     return providerCode;
   }
 
-  generateCategoryCode(nb): string{
-    let categoryCode;
+  /**
+   * Génère et retourne le code famille
+   * @param nb Numéro de la famille article
+   */
+  private generateCategoryCode(nb: number): string{
+    let categoryCode: string;
     if (nb < 10)
       categoryCode = "FAR0000" + nb;
     else if (nb < 100)
@@ -458,8 +425,12 @@ export class CsvService {
     return categoryCode;
   }
 
-  generateArticleCode(nb): string{
-    let articleCode;
+  /**
+   * Génère et retourne le code article
+   * @param nb Numéro de l'article
+   */
+  private generateArticleCode(nb: number): string{
+    let articleCode: string;
     if (nb < 10)
       articleCode = "AR0000" + nb;
     else if (nb < 100)
@@ -471,15 +442,5 @@ export class CsvService {
     else
       articleCode = "AR" + nb;
     return articleCode;
-  }
-
-  encode_utf8(s) {
-    //return encodeURIComponent(s);
-    return unescape(encodeURIComponent(s));
-  }
-  
-  decode_utf8(s) {
-    //return decodeURIComponent(escape(s));
-    return decodeURIComponent(s);
   }
 }

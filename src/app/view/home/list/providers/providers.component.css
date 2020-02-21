@@ -1,5 +1,10 @@
 .selectedProvider{
     background: rgb(172, 172, 172);
+    transition: ease 0.25s all;
+}
+
+.selectedProvider:hover{
+    background: rgb(141, 141, 141) !important;
 }
 
 .providerItem:hover{

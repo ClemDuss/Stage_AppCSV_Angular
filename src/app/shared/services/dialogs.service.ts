@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 import { ProvidersService } from "./providers.service";
 
@@ -20,34 +20,26 @@ export class DialogsService {
     private csvService: CsvService,
   ) { }
 
-  openNewProviderDialog() {
-    const dialogRef = this.dialog.open(NewProviderComponent);
+  public openNewProviderDialog(): void{
+    this.dialog.open(NewProviderComponent);
 
     this.providersService.resetSelectedIndex();
-
-    dialogRef.afterClosed().subscribe(result => {
-      //console.log(`Dialog result: ${result}`);
-    });
   }
 
-  closeNewProviderDialog() {
-    const dialogRef = this.dialog.closeAll();
-  }
-
-  openCorrespondenceDialog() {
+  public closeNewProviderDialog(): void{
     this.dialog.closeAll();
-    const dialogRef = this.dialog.open(CorrespondenceComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      //console.log(`Dialog result: ${result}`);
-    });
   }
 
-  openEditProviderDialog(){
-    const dialogRef = this.dialog.open(EditComponent);
+  public openCorrespondenceDialog(): void{
+    this.dialog.closeAll();
+    this.dialog.open(CorrespondenceComponent);
   }
 
-  openExportDialog(){
+  public openEditProviderDialog(): void{
+    this.dialog.open(EditComponent);
+  }
+
+  public openExportDialog(): void{
     const dialogRef = this.dialog.open(InExportComponent);
 
     dialogRef.afterClosed().subscribe(result => {
@@ -55,7 +47,7 @@ export class DialogsService {
     });
   }
 
-  closeExportDialog(){
+  public closeExportDialog(): void{
     this.dialog.closeAll();
   }
 }

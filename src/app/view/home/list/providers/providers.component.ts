@@ -11,32 +11,32 @@ import { DialogsService } from 'src/app/shared/services/dialogs.service';
   styleUrls: ['./providers.component.css']
 })
 export class ProvidersComponent implements OnInit {
-  providers : Array<Provider>;
-  selectedProvider;
-  selectedProviderIndex;
-  displayedColumns: string[] 
+  private _providers : Array<Provider>;
+  private _selectedProvider: Provider;
+  private _selectedProviderIndex: number;
+  public displayedColumns: string[] 
 
   constructor(
     public providersService: ProvidersService,
-    private dialogsService: DialogsService,
+    private _dialogsService: DialogsService,
   ) {
-    this.providers = this.providersService.getProviders();
-    this.selectedProvider = this.providersService.getSelectedProvider();
-    this.selectedProviderIndex = this.providersService.getSelectedProviderIndex();
+    this._providers = this.providersService.getProviders();
+    this._selectedProvider = this.providersService.getSelectedProvider();
+    this._selectedProviderIndex = this.providersService.getSelectedProviderIndex();
     this.displayedColumns = ['name', 'validFile', 'toExport'];
   }
 
   ngOnInit(): void {
   }
 
-  selectThisProvider(index){
+  public selectThisProvider(index): void{
     this.providersService.setSelectedProvider(index);
-    this.selectedProvider = this.providersService.getSelectedProvider();
-    this.selectedProviderIndex = this.providersService.getSelectedProviderIndex();
+    this._selectedProvider = this.providersService.getSelectedProvider();
+    this._selectedProviderIndex = this.providersService.getSelectedProviderIndex();
   }
 
-  openEditProviderDialog(){
-    this.dialogsService.openEditProviderDialog();
+  public openEditProviderDialog(): void{
+    this._dialogsService.openEditProviderDialog();
   }
 
 }

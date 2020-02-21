@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Sélectionnez les correspondances</h2>
+<h2 mat-dialog-title>{{ title }}</h2>
 <mat-dialog-content>
     <mat-progress-spinner [value]="loadFileProgression"></mat-progress-spinner>
     <div *ngFor="let categ of categs, index as categIndex">
@@ -11,5 +11,5 @@
         </mat-form-field>
     </div>
 
-    <app-button [content]="'Valider'" (clickCusto)="onSubmit()"></app-button>
+    <app-button [content]="validBtn_content" (clickCusto)="validBtn_click()"></app-button>
 </mat-dialog-content>

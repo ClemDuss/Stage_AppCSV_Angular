@@ -1,12 +1,6 @@
 <div class="row">
-    <div class="col-3">
-        <app-add-provider></app-add-provider>
-    </div>
-    <div class="col-3 export-btn offset-6">
-        <app-create-csv></app-create-csv>
-    </div>
+    <app-button class="col-3" [content]="addProviderBtn_content" [icon]="addProviderBtn_icon" (clickCusto)="addProviderBtn_click()"></app-button>
+    <app-button class="col-3 offset-6 export-btn" [content]="exportBtn_content" [icon]="exportBtn_icon" (clickCusto)="exportBtn_click()"></app-button>
 </div>
-
-<app-list></app-list>
-
+<app-list class="row"></app-list>
 

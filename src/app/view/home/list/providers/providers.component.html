@@ -1,20 +1,29 @@
 <table mat-table [dataSource]="this.providersService.providers" class="mat-elevation-z8 col-12">
     <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Fournisseurs</th>
-        <td mat-cell *matCellDef="let element, index as providerId"  [ngClass]="{'selectedProvider': providerId === this.providersService.getSelectedProviderIndex()}" (click)="selectThisProvider(providerId)" (dblclick)="openEditProviderDialog()"> {{element.name}} </td>
+        <td mat-cell *matCellDef="let element, index as providerId"> {{element.name}} </td>
     </ng-container>
     <ng-container matColumnDef="validFile">
         <th mat-header-cell *matHeaderCellDef class="col-content-center">Fichier</th>
-        <td mat-cell *matCellDef="let element, index as providerId" class="col-content-center" [ngClass]="{'selectedProvider': providerId === this.providersService.getSelectedProviderIndex()}" (click)="selectThisProvider(providerId)" (dblclick)="openEditProviderDialog()"> <i class="material-icons">{{ this.providersService.isFielExists(providerId) }}</i> </td>
+        <td mat-cell *matCellDef="let element, index as providerId" class="col-content-center">
+            <i class="material-icons">
+                {{ this.providersService.isFielExists(providerId) }}
+            </i>
+        </td>
     </ng-container>
     <ng-container matColumnDef="toExport">
         <th mat-header-cell *matHeaderCellDef class="col-content-center">À exporter</th>
-        <td mat-cell *matCellDef="let element, index as providerId" class="col-content-center" [ngClass]="{'selectedProvider': providerId === this.providersService.getSelectedProviderIndex()}" (click)="selectThisProvider(providerId)" (dblclick)="openEditProviderDialog()">
+        <td mat-cell *matCellDef="let element, index as providerId" class="col-content-center">
             <span *ngIf="element.toExport"><i class="material-icons">check</i></span>
             <span *ngIf="!element.toExport"><i class="material-icons">clear</i></span>
         </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="tableRows"></tr>
+    <tr mat-row *matRowDef="let row, index as providerId; columns: displayedColumns;"
+        class="tableRows" 
+        [ngClass]="{'selectedProvider': providerId === this.providersService.getSelectedProviderIndex()}"
+        (click)="selectThisProvider(providerId)"
+        (dblclick)="openEditProviderDialog()">
+    </tr>
 </table>

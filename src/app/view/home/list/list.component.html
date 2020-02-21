@@ -1,17 +1,22 @@
-<div class="row">
-    <div class="col-2">
-        <app-place-provider-before></app-place-provider-before>
-        <br/>
-        <app-place-provider-after></app-place-provider-after>
+<div class="col-2">
+    <div>
+        <app-button [icon]="moveUpProviderBtn_icon" (clickCusto)="moveUpProviderBtn_click()"></app-button>
     </div>
-    <div class="col-8">
-        <app-providers></app-providers>
+    <div>
+        <app-button [icon]="moveDownProviderBtn_icon" (clickCusto)="moveDownProviderBtn_click()"></app-button>
     </div>
-    <div class="col-2" [ngClass]="{ 'displayProviderActions' : providersService.getProviderActionVisible(), 'notDisplayProviderActions' : !providersService.getProviderActionVisible() }">
-        <app-edit-provider></app-edit-provider>
-        <br/>
-        <app-to-export-provider></app-to-export-provider>
-        <br/>
-        <app-delete-provider></app-delete-provider>
+</div>
+<div class="col-8">
+    <app-providers></app-providers>
+</div>
+<div class="col-2" [ngClass]="providersService.getProviderActionVisible() ? 'displayProviderActions' : 'notDisplayProviderActions'">
+    <div>
+        <app-button [content]="editProviderBtn_content" [icon]="editProviderBtn_icon" (clickCusto)="editProviderBtn_click()"></app-button>
+    </div>
+    <div>
+        <mat-checkbox *ngIf="this.providersService.getSelectedProviderIndex() > -1" [checked]="toExportCheckBox_value()" (change)="toExportCheckBox_change()">{{ toExportCheckBox_content }}</mat-checkbox>
+    </div>
+    <div>
+        <app-button [content]="deleteProviderBtn_content" [icon]="deleteProviderBtn_icon" (clickCusto)="deleteProviderBtn_click()"></app-button>
     </div>
 </div>

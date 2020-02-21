@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
-import {FlatTreeControl} from '@angular/cdk/tree';
 
 import { ProvidersService } from 'src/app/shared/services/providers.service';
 import { CsvService } from 'src/app/shared/services/csv.service';
@@ -9,39 +7,46 @@ import { CsvService } from 'src/app/shared/services/csv.service';
 import { Provider } from 'src/app/shared/models/provider';
 import { DialogsService } from 'src/app/shared/services/dialogs.service';
 
+interface StateArray{
+  name: string;
+  state: string;
+}
+
 @Component({
   selector: 'app-in-export',
   templateUrl: './in-export.component.html',
   styleUrls: ['./in-export.component.css']
 })
 export class InExportComponent implements OnInit {
-  providers: Array<Provider>;
-  filesNames: any[];
+  public providers: Array<Provider>;
+  public filesNames: any[];
 
-  exportStatus = [];
-  subscribeExportFileStatus: Subscription;
-  exportArticleDetailsState = [];
-  subscribeExportArticleDetailsState: Subscription;
+  public okBtn_content = 'OK';
 
-  isExportEnded;
-  subscriptionIsExportEnded: Subscription;
+  public exportStatus: StateArray;
+  private _subscribeExportFileStatus: Subscription;
+  public exportArticleDetailsState: StateArray;
+  private _subscribeExportArticleDetailsState: Subscription;
+
+  public isExportEnded: boolean;
+  private _subscriptionIsExportEnded: Subscription;
 
   constructor(
-    private providersService: ProvidersService,
-    private csvService: CsvService,
-    private dialogsService: DialogsService,
+    private _providersService: ProvidersService,
+    private _csvService: CsvService,
+    private _dialogsService: DialogsService,
   ) {
-    this.providers = providersService.getProviders();
-    this.filesNames = csvService.filesNames;
+    this.providers = _providersService.getProviders();
+    this.filesNames = _csvService.filesNames;
 
-    this.subscribeExportFileStatus = csvService.getExportFileStatus().subscribe((data)=>{
+    this._subscribeExportFileStatus = _csvService.getExportFileStatus().subscribe((data)=>{
       this.exportStatus=data;
     });
-    this.subscribeExportArticleDetailsState = csvService.getExportArticleDetailsState().subscribe((data)=>{
+    this._subscribeExportArticleDetailsState = _csvService.getExportArticleDetailsState().subscribe((data)=>{
       this.exportArticleDetailsState=data;
     });
 
-    this.subscriptionIsExportEnded = csvService.getIsExportEnded().subscribe((data)=>{
+    this._subscriptionIsExportEnded = _csvService.getIsExportEnded().subscribe((data)=>{
       this.isExportEnded = data;
     });
   }
@@ -49,8 +54,8 @@ export class InExportComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  okClick(){
-    this.dialogsService.closeExportDialog();
+  public okBtn_click(): void{
+    this._dialogsService.closeExportDialog();
   }
 
 }

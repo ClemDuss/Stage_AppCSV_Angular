@@ -20,23 +20,21 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./input.component.css']
 })
 export class InputComponent implements OnInit {
-  @Input() type = 'text';
-  @Input() name;
-  @Input() label;
-  @Input() id;
-  @Input() change;
-  @Input() required : true | false = false;
-  @Input() accept;
-  @Input() inputModel: string;
-  @Output() inputModelChange = new EventEmitter<string>();
+  @Input() public type: string = 'text';
+  @Input() public name: string;
+  @Input() public label: string;
+  @Input() public id: string;
+  @Input() public change: string;
+  @Input() public required : true | false = false;
+  @Input() public accept: string;
+  @Input() public inputModel: string;
+  @Output() public inputModelChange: EventEmitter<string> = new EventEmitter<string>();
 
-  isAnError : boolean = false;
-
-  inputControl = new FormControl('', [
+  public inputControl = new FormControl('', [
     Validators.required,
   ]);
 
-  matcher = new MyErrorStateMatcher();
+  public matcher = new MyErrorStateMatcher();
 
   constructor() { }
 

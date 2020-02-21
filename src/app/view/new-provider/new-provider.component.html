@@ -1,12 +1,12 @@
-<h2 mat-dialog-title>Ajouter un fournisseur</h2>
+<h2 mat-dialog-title>{{ title }}</h2>
 <mat-dialog-content>
-    <app-input [label]="nameLabel" [id]="nameId" [name]="'name'" [(inputModel)]="providerName" [required]="true"></app-input>
+    <app-input [label]="providerNameInput_label" [id]="providerNameInput_id" [name]="providerNameInput_name" [(inputModel)]="providerNameInput_value" [required]="true"></app-input>
     <div>
-        <label>Fichier :</label>
-        <input type="file" #csvReader name="Upload CSV" id="txtFileUpload" (change)="updateFile($event.target.files)" accept=".csv" />
+        <label>{{ providerFileInput_label }}</label>
+        <input type="file" #csvReader [name]="providerFileInput_name" [id]="providerFileInput_id" (change)="updateFile($event.target.files)" [accept]="providerFileInput_accept" />
     </div>    
 
-    <app-button [type]="'button'" (clickCusto)="cancelAddProvider()" [content]="cancelContentButton"></app-button>
-    <app-button [type]="'submit'" (clickCusto)="onSubmit()" [content]="addProviderContentButton"></app-button>
+    <app-button [type]="'button'" (clickCusto)="cancelBtn_click()" [content]="cancelBtn_content"></app-button>
+    <app-button [type]="'submit'" (clickCusto)="validBtn_click()" [content]="validBtn_content"></app-button>
 </mat-dialog-content>
 

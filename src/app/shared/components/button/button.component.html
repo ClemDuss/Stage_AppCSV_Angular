@@ -1,1 +1,6 @@
-<button mat-button type={{type}} (click)="clickCusto.emit()"><mat-icon *ngIf="icon">{{ icon }} </mat-icon>{{ content }}</button>
+<button mat-button type={{type}} (click)="clickCusto.emit()">
+    <mat-icon *ngIf="icon">
+        {{ icon }}
+    </mat-icon>
+    {{ content }}
+</button>

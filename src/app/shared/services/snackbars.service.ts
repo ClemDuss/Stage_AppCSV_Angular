@@ -12,31 +12,31 @@ export class SnackbarsService {
     private _snackBar: MatSnackBar
   ) { }
 
-  snackbar(message: string, action: string = 'OK', delay:number = 3000){
+  public snackbar(message: string, action: string = 'OK', delay:number = 3000): void{
     this._snackBar.open(message, action, {
       duration: delay,
     });
   }
 
-  providerAdded(provider: Provider){
+  public providerAdded(provider: Provider): void{
     this._snackBar.open('Le fournisseur ' + provider.name + ' a été créé.', 'OK', {
       duration: 3000,
     });
   }
 
-  correspondenceSetted(provider: Provider){
+  public correspondenceSetted(provider: Provider): void{
     this._snackBar.open('Les correspondances de ' + provider.name + ' ont étées mises à jour !', 'OK', {
       duration: 4000,
     });
   }
 
-  editedProvider(){
+  public editedProvider(): void{
     this._snackBar.open('Les informations du fournisseur ont étées mises à jour !', 'OK', {
       duration: 3000,
     });
   }
 
-  deleteProvider(provider:Provider){
+  public deleteProvider(provider:Provider): void{
     this._snackBar.open('Le fournisseur ' + provider.name + ' a été supprimé.', 'OK', {
       duration: 3000,
     });

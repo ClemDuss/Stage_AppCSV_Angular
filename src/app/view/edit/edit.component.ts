@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialogRef} from '@angular/material/dialog';
 
 import { ProvidersService } from '../../shared/services/providers.service';
 import { DialogsService } from 'src/app/shared/services/dialogs.service';
@@ -13,64 +12,64 @@ import { Provider } from '../../shared/models/provider';
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent implements OnInit {
-  addProviderContentButton = 'Valider les modifications';
-  cancelContentButton = 'Annuler';
+  public title: string = 'Modifier un fournisseur';
 
-  nameLabel = 'Nom du fournisseur';
-  fileLabel = 'Fichier fournisseur';
-  nameId = 'providerName';
-  fileId = 'providerFile';
+  public validBtn_content: string = 'Valider les modifications';
+  public cancelBtn_content: string = 'Annuler';
 
-  provider = new Provider();
+  public providerNameInput_label: string = 'Nom du fournisseur';
+  public providerNameInput_id: string = 'providerName';
+  public providerNameInput_name: string = 'providerName';
+  public providerNameInput_value : string;
 
-  providerName : string;
-  providerFile : File;
+  private _provider = new Provider();
+
+  public providerFileInput_label: string = 'Fichier fournisseur : ';
+  public providerFileInput_id: string = 'providerFile';
+  public providerFileInput_name: string = 'providerFile';
+  public providerFileInput_accept: string = '.csv';
+  public providerFileInput_value: File;
 
   constructor(
-    private providersService : ProvidersService,
-    private router : Router,
-    private dialogsService: DialogsService,
-    public dialogRef: MatDialogRef<DialogsService>,
+    private _providersService : ProvidersService,
+    private _dialogsService: DialogsService,
+    private _dialogRef: MatDialogRef<DialogsService>,
   ) { 
-    this.provider = this.providersService.getSelectedProvider();
-    this.providerName = this.provider.name;
-    this.providerFile = this.provider.file;
+    this._provider = this._providersService.getSelectedProvider();
+    this.providerNameInput_value = this._provider.name;
+    this.providerFileInput_value = this._provider.file;
   }
 
   ngOnInit(): void {
   }
 
-  onSubmit(){
+  public validBtn_click(): void{
     let addingIsPossible = true;
-    this.provider.name = this.providerName;
-    this.provider.file = this.providerFile;
+    this._provider.name = this.providerNameInput_value;
+    this._provider.file = this.providerFileInput_value;
 
-    if(this.provider.name == ""){
+    if(this._provider.name == ""){
       addingIsPossible = false;
     }
-    if(this.provider.file == undefined || this.provider.file.name == undefined){
+    if(this._provider.file == undefined || this._provider.file.name == undefined){
       addingIsPossible = false;
     }
 
     if(addingIsPossible){
-      this.providersService.editProvider(this.provider)
-      this.dialogsService.openCorrespondenceDialog();
+      this._providersService.editProvider(this._provider)
+      this._dialogsService.openCorrespondenceDialog();
     }
   }
 
-  cancelEditProvider(){
-      this.dialogRef.close();
+  public cancelBtn_click(): void{
+      this._dialogRef.close();
   }
-
-  goToHome(){
-    this.router.navigate(['']);
-  }
-
-  updateFile(files:FileList = null){
+  
+  public updateFile(files:FileList = null): void{
     if(files[0].toString() != "$"){
       var file = files[0];
       if(file != null){
-        this.providerFile = files[0];
+        this.providerFileInput_value = files[0];
       }
     }
   }

@@ -17,5 +17,5 @@
             {{ provider.name }}
         </div>
     </div>
-    <app-button *ngIf="isExportEnded == true" [content]="'OK'" (clickCusto)="okClick()"></app-button>
+    <app-button *ngIf="isExportEnded == true" [content]="okBtn_content" (clickCusto)="okBtn_click()"></app-button>
 </mat-dialog-content>
