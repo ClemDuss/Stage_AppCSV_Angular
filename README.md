@@ -4,7 +4,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## To install
 ### npm
-`bootstrap` `@fortawesome/fontawesome-free`
+`bootstrap` `@fortawesome/fontawesome-free` `save-as`
 
 ### ng add
 `@angular/material`
